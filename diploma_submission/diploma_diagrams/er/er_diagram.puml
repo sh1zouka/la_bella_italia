@@ -1,0 +1,123 @@
+@startuml
+' ============================================================
+' ER-диаграмма — La Bella Italia
+' Все таблицы связаны между собой
+' ============================================================
+' Скопировать в https://www.planttext.com для рендера
+
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 13
+skinparam packageFontSize 14
+
+title **ER-диаграмма базы данных «La Bella Italia»**
+
+' === Легенда ===
+legend right
+  | PK | Первичный ключ |
+  | FK | Внешний ключ |
+  | JSONB | Гибкое поле (JSON) |
+endlegend
+
+' === Таблица users ===
+entity "**users**\n— Пользователи —" as users {
+  *id : INTEGER <<PK>>
+  --
+  *name : VARCHAR(255)
+  *email : VARCHAR(255) <<UNIQUE>>
+  *password : VARCHAR(255)
+  phone : VARCHAR(50)
+  role : VARCHAR(20)
+  bonusPoints : INTEGER
+  createdAt : TIMESTAMP
+}
+
+' === Таблица orders ===
+entity "**orders**\n— Заказы —" as orders {
+  *id : INTEGER <<PK>>
+  --
+  *userId : INTEGER <<FK>>
+  items : JSONB
+  total : INTEGER
+  bonusDiscount : INTEGER
+  finalTotal : INTEGER
+  earnedBonuses : INTEGER
+  deliveryData : JSONB
+  status : VARCHAR(20)
+  createdAt : TIMESTAMP
+}
+
+' === Связующая таблица order_items ===
+entity "**order_items**\n— Позиции заказа —\n(связь M:N)" as order_items {
+  *id : INTEGER <<PK>>
+  --
+  *orderId : INTEGER <<FK>>
+  *menuItemId : INTEGER <<FK>>
+  *quantity : INTEGER
+  priceAtOrder : INTEGER
+  nameAtOrder : VARCHAR(255)
+  imgAtOrder : VARCHAR(50)
+}
+
+' === Таблица menu_items ===
+entity "**menu_items**\n— Блюда меню —" as menu_items {
+  *id : INTEGER <<PK>>
+  --
+  *category : VARCHAR(50)
+  *name : VARCHAR(255)
+  desc : TEXT
+  *price : INTEGER
+  weight : VARCHAR(20)
+  img : VARCHAR(50)
+  photo : VARCHAR(500)
+  macros : JSONB
+  popular : BOOLEAN
+}
+
+' === СВЯЗИ ===
+' Пользователь → Заказы (1:N)
+users ||--o{ orders : "1 пользователь\nимеет много заказов"
+
+' Заказ → Позиции заказа (1:N)
+orders ||--o{ order_items : "1 заказ\nсостоит из N позиций"
+
+' Позиции заказа → Блюдо меню (N:1)
+order_items }o--|| menu_items : "N позиций\nссылаются на 1 блюдо"
+
+note bottom of order_items
+  **Почему эта таблица нужна:**
+  В коде items хранятся в JSONB,
+  но для реляционной модели
+  правильнее использовать
+  связующую таблицу order_items.
+  Это обеспечивает:
+  - ссылочную целостность
+  - возможность SQL-аналитики
+  - нормализацию данных
+end note
+
+note top of users
+  **Роли пользователей:**
+  • user — обычный клиент
+  • admin — администратор
+  bonusPoints = 100 при регистрации
+end note
+
+note top of orders
+  **Статусы заказа:**
+  confirmed → preparing →
+  delivering → done
+  (или cancelled)
+end note
+
+note top of menu_items
+  **Категории блюд:**
+  • pizza (10)
+  • pasta (10)
+  • starters (10)
+  • desserts (10)
+  • drinks (10)
+  Всего: 50 блюд
+end note
+
+@enduml

@@ -1,0 +1,64 @@
+@startuml
+' ============================================================
+' Use Case Diagram — La Bella Italia
+' Скопируйте в https://www.planttext.com  или
+' вставьте в VS Code с плагином PlantUML
+' ============================================================
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorFontSize 14
+skinparam useCaseFontSize 12
+
+' ===== Акторы (роли) =====
+actor "Гость" as Guest
+actor "Пользователь" as User
+actor "Администратор" as Admin
+
+' ===== Прямоугольники-контексты =====
+rectangle "Система доставки\nLa Bella Italia" as System {
+  
+  ' === Гость ===
+  usecase "UC1\nПросмотр меню" as UC1
+  usecase "UC2\nПоиск и фильтрация блюд" as UC2
+  usecase "UC3\nРегистрация" as UC3
+  usecase "UC4\nВход в систему" as UC4
+
+  ' === Пользователь ===
+  usecase "UC5\nУправление корзиной\n(добавить/удалить)" as UC5
+  usecase "UC6\nОформление заказа\nс бонусами" as UC6
+  usecase "UC7\nПросмотр истории заказов" as UC7
+  usecase "UC8\nПросмотр профиля" as UC8
+  usecase "UC9\nПросмотр статуса заказа" as UC9
+
+  ' === Администратор ===
+  usecase "UC10\nУправление меню\n(добавить/редактировать/удалить)" as UC10
+  usecase "UC11\nУправление заказами\n(смена статуса)" as UC11
+  usecase "UC12\nУправление пользователями" as UC12
+  usecase "UC13\nПросмотр статистики" as UC13
+}
+
+' ===== Связи акторов с use case =====
+Guest --> UC1
+Guest --> UC2
+Guest --> UC3
+Guest --> UC4
+
+User --> UC1
+User --> UC2
+User --> UC5
+User --> UC6
+User --> UC7
+User --> UC8
+User --> UC9
+
+Admin --> UC10
+Admin --> UC11
+Admin --> UC12
+Admin --> UC13
+
+' ===== Отношения между use case =====
+UC3 .> UC4 : «extends»
+UC5 .> UC6 : «includes»
+
+@enduml

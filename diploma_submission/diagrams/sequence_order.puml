@@ -1,0 +1,86 @@
+@startuml
+' ============================================================
+' Sequence Diagram — Оформление заказа
+' Скопируйте в https://www.planttext.com
+' ============================================================
+
+actor "Пользователь" as User
+participant "Браузер\n(Frontend)" as Browser
+participant "Сервер\n(Express.js)" as Server
+participant "Sequelize\nORM" as ORM
+database "PostgreSQL\n16.x" as DB
+
+== 1. Просмотр меню ==
+
+User -> Browser: Открывает меню
+Browser -> Server: GET /api/menu?category=pizza
+Server -> ORM: MenuItem.findAll({ where: { category: 'pizza' } })
+ORM -> DB: SELECT * FROM menu_items WHERE category = 'pizza'
+DB --> ORM: Массив блюд (10 пицц)
+ORM --> Server: plain JSON
+Server --> Browser: [{id, name, price, img, macros, ...}]
+Browser -> User: Отображает карточки блюд
+
+== 2. Добавление в корзину ==
+
+User -> Browser: Нажимает «Добавить»
+Browser -> Browser: cart.push({ menuItemId, name, price, quantity })
+note right: localStorage.setItem('cart', ...)
+
+== 3. Оформление заказа ==
+
+User -> Browser: Заполняет данные доставки\nи нажимает «Оформить»
+Browser -> Server: POST /api/orders
+note right
+  Body: {
+    items: [...],
+    deliveryData: {address, phone},
+    useBonuses: true
+  }
+end note
+
+Server -> Server: Валидация данных
+Server -> Server: Расчёт: total → bonusDiscount → finalTotal
+Server -> ORM: Order.create({ ... })
+ORM -> DB: INSERT INTO orders ... RETURNING *
+DB --> ORM: { id, userId, items, total, ..., status: 'confirmed', createdAt }
+ORM --> Server: Созданный заказ
+
+== 4. Начисление бонусов ==
+
+Server -> Server: earnedBonuses = Math.floor(finalTotal * 0.05)
+Server -> ORM: User.increment({ bonusPoints: earnedBonuses }, { where: { id } })
+ORM -> DB: UPDATE users SET bonusPoints = bonusPoints + earned
+DB --> ORM: Обновлено
+ORM --> Server: Готово
+
+Server -> Browser: { success: true, order: { id, ... } }
+Browser -> User: «Заказ №42 оформлен!»
+
+== 5. Просмотр статуса ==
+
+User -> Browser: Открывает профиль → «Мои заказы»
+Browser -> Server: GET /api/orders
+Server -> ORM: Order.findAll({ where: { userId }, order: ... })
+ORM -> DB: SELECT * FROM orders WHERE userId = ? ORDER BY createdAt DESC
+DB --> ORM: [{ id, status: 'confirmed', items, total, ... }]
+ORM --> Server: Массив заказов
+Server --> Browser: [{ id, statusLabel, finalTotal, ... }]
+Browser -> User: Список заказов\nсо статусами «Подтверждён» / «Готовится» / ...
+
+== 6. Смена статуса (Админ) ==
+
+Admin -> Browser: Меняет статус на «Готовится»
+Browser -> Server: PATCH /api/admin/orders/42
+note right
+  Body: { status: 'preparing' }
+end note
+Server -> ORM: Order.update({ status: 'preparing' }, { where: { id: 42 } })
+ORM -> DB: UPDATE orders SET status = 'preparing' WHERE id = 42
+DB --> ORM: 1 row updated
+ORM --> Server: Готово
+Server --> Browser: { success: true }
+Browser -> User: Статус обновлён
+note right: При перезагрузке\nстатус отображается\nкак «Готовится»
+
+@enduml

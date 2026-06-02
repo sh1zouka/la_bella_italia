@@ -1,0 +1,70 @@
+@startuml
+' ============================================================
+' Диаграмма архитектуры — La Bella Italia
+' ============================================================
+' Скопировать в https://www.planttext.com для рендера
+
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 13
+skinparam componentStyle rectangle
+
+title **Диаграмма архитектуры приложения**
+
+' === Клиентская часть ===
+package "Клиент (Browser)\nFrontend" as Frontend {
+  [HTML страницы\n(index, menu, cart,\nauth, profile, admin)] as HTML
+  [CSS стили\n(style.css)] as CSS
+  [JavaScript модули\n(app, auth, cart, db)] as JS
+  database "localStorage\n(Корзина)" as LS
+}
+
+' === Серверная часть ===
+package "Сервер (Node.js)\nBackend" as Backend {
+  [Express.js\n(маршрутизация)] as Express
+  
+  [Middleware\nhelmet + session +\nrate-limit + bcrypt] as Middleware
+  
+  [NeDB-совместимая\nабстракция\ndatabase.js] as NeDBWrapper
+  
+  database "Sequelize ORM\n(модели User,\nMenuItem, Order)" as ORM
+}
+
+' === База данных ===
+database "PostgreSQL 16\n(СУБД)" as PG {
+  [users] as T1
+  [menu_items] as T2
+  [orders] as T3
+}
+
+' === Внешние зависимости ===
+cloud "Внешние сервисы" as External {
+  [Google Fonts] as GF
+}
+
+' === Связи ===
+Frontend -down-> Backend : HTTP/JSON\n(REST API)
+
+Backend -up-> Frontend : JSON Response\n(HTML, CSS, JS)
+
+HTML .left.> CSS : Подключение
+HTML .right.> JS : Скрипты
+JS .> LS : localStorage\n(чтение/запись)
+
+Express -down-> Middleware : Прогон через\nmiddleware
+Middleware -down-> NeDBWrapper : Запросы к БД\n(find, insert, update)
+NeDBWrapper -down-> ORM : Трансляция\nNeDB → Sequelize
+ORM -down-> PG : SQL запросы\n(TCP 5432)
+PG -up-> ORM : Результаты
+
+Frontend .> GF : Шрифты
+
+' === Легенда ===
+legend bottom
+  |= Слой |= Технология |= Назначение |
+  | Клиент | HTML/CSS/JS | Отображение и взаимодействие |
+  | Сервер | Node.js/Express | Бизнес-логика и API |
+  | БД | PostgreSQL | Хранение данных |
+endlegend
+
+@enduml

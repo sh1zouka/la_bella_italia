@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Bella Italia — Гайд для защиты</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --red: #d63031;
+    --red-light: #ffeaea;
+    --gold: #fdcb6e;
+    --bg: #f8f7f5;
+    --text: #1a1a1a;
+    --text-muted: #9e9e9e;
+    --border: #ebebeb;
+    --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 0;
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #1a0000 0%, #2d0505 40%, #1a0a00 100%);
+    color: #fff;
+    padding: 60px 24px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '🍕';
+    position: absolute;
+    font-size: 200px;
+    opacity: 0.04;
+    right: -40px;
+    top: -40px;
+    pointer-events: none;
+  }
+  .hero h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
+  .hero h1 em { color: var(--gold); font-style: normal; }
+  .hero p { opacity: 0.7; font-size: 1rem; max-width: 600px; margin: 0 auto; }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(253,203,110,0.15);
+    border: 1px solid rgba(253,203,110,0.3);
+    padding: 4px 14px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  /* Navigation */
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    overflow-x: auto;
+    flex-wrap: wrap;
+  }
+  .nav-tab {
+    padding: 14px 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active { color: var(--red); border-bottom-color: var(--red); }
+
+  /* Content */
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 40px 0; border-bottom: 1px solid var(--border); }
+  section:last-child { border-bottom: none; }
+  section h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  section h2::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, var(--red), transparent);
+  }
+  section h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 20px 0 10px;
+  }
+  section p, section li {
+    font-size: 0.92rem;
+    color: #444;
+    margin-bottom: 8px;
+  }
+
+  /* Cards */
+  .card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .card-title {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    color: var(--red);
+  }
+
+  /* Grids */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  @media (max-width: 640px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin: 12px 0;
+  }
+  th {
+    background: var(--bg);
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border);
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  tr:hover td { background: var(--bg); }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 50px;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .tag-red { background: var(--red-light); color: var(--red); }
+  .tag-green { background: #d1fae5; color: #065f46; }
+  .tag-blue { background: #dbeafe; color: #1d4ed8; }
+  .tag-yellow { background: #fef3c7; color: #b45309; }
+  .tag-gray { background: #e5e7eb; color: #6b7280; }
+
+  /* Code */
+  code, pre {
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.82rem;
+  }
+  pre {
+    background: #1a1a1a;
+    color: #e8e8e8;
+    padding: 16px 20px;
+    border-radius: 12px;
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.5;
+  }
+  code {
+    background: var(--red-light);
+    color: var(--red);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+  }
+
+  /* Highlight */
+  .highlight {
+    background: #fffbeb;
+    border-left: 4px solid var(--gold);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 0.9rem;
+  }
+  .highlight strong { color: #92400e; }
+
+  .tip {
+    background: #f0fdf4;
+    border-left: 4px solid #00b894;
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 0.9rem;
+  }
+  .tip strong { color: #065f46; }
+
+  .warn {
+    background: var(--red-light);
+    border-left: 4px solid var(--red);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 0.9rem;
+  }
+
+  /* Q&A */
+  .qa-item {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+  }
+  .qa-q {
+    font-weight: 700;
+    color: var(--red);
+    margin-bottom: 6px;
+    font-size: 0.92rem;
+  }
+  .qa-a { font-size: 0.88rem; color: #444; }
+
+  /* Checklist */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    padding: 10px 14px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.88rem;
+  }
+  .checklist li::before {
+    content: '☐';
+    font-size: 1.2rem;
+    color: var(--text-muted);
+  }
+  .checklist li.done::before {
+    content: '☑';
+    color: #00b894;
+  }
+  .checklist li.done { border-color: #bbf7d0; background: #f0fdf4; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .btn-red { background: var(--red); color: #fff; }
+  .btn-red:hover { background: #b71c1c; }
+  .btn-outline { border: 1.5px solid var(--red); color: var(--red); }
+  .btn-outline:hover { background: var(--red-light); }
+
+  .footer {
+    text-align: center;
+    padding: 32px 24px;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+  }
+
+  /* Print */
+  @media print {
+    .nav-tabs { display: none; }
+    .hero { padding: 40px 24px; }
+    section { break-inside: avoid; }
+    pre { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div class="hero-badge">🍕 Дипломный проект</div>
+  <h1><em>La Bella Italia</em></h1>
+  <p>Веб-приложение для автоматизации приёма и обработки заказов в итальянском ресторане</p>
+</div>
+
+<!-- ===== TABS ===== -->
+<nav class="nav-tabs" id="tabs">
+  <a href="#overview" class="nav-tab active">📋 Обзор</a>
+  <a href="#tech" class="nav-tab">🛠 Стек</a>
+  <a href="#structure" class="nav-tab">📁 Структура</a>
+  <a href="#db" class="nav-tab">🗄 БД</a>
+  <a href="#api" class="nav-tab">🌐 API</a>
+  <a href="#run" class="nav-tab">🚀 Запуск</a>
+  <a href="#roles" class="nav-tab">👥 Роли</a>
+  <a href="#demo" class="nav-tab">🎬 Демо</a>
+  <a href="#qa" class="nav-tab">💬 Q&A</a>
+  <a href="#checklist" class="nav-tab">✅ Чек-лист</a>
+</nav>
+
+<div class="container">
+
+<!-- ===== 1. OVERVIEW ===== -->
+<section id="overview">
+  <h2>📋 Обзор проекта</h2>
+
+  <div class="card">
+    <div class="card-title">🎯 Назначение</div>
+    <p>Веб-приложение для автоматизации приёма и обработки заказов в итальянском ресторане «La Bella Italia». Позволяет ресторану отказаться от сторонних агрегаторов (Яндекс.Еда, Delivery Club), берущих комиссию ~30%.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">👤 Для клиентов</div>
+      <ul style="padding-left: 18px;">
+        <li>Просмотр меню с поиском и категориями</li>
+        <li>Корзина с изменением количества</li>
+        <li>Оформление заказа с валидацией</li>
+        <li>Регистрация / авторизация</li>
+        <li>🎁 Бонусная программа</li>
+        <li>📋 История заказов в профиле</li>
+        <li>📱 Адаптивный дизайн</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">🔧 Для администратора</div>
+      <ul style="padding-left: 18px;">
+        <li>📦 Управление заказами (статусы, удаление)</li>
+        <li>👥 Список пользователей</li>
+        <li>🍕 CRUD меню (добавить/удалить блюда)</li>
+        <li>📊 Статистика (выручка, средний чек)</li>
+        <li>🔒 Защищённые админ-маршруты</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2. TECH STACK ===== -->
+<section id="tech">
+  <h2>🛠 Технологический стек</h2>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">🔵 Сервер</div>
+      <ul style="padding-left: 18px; font-size: 0.88rem;">
+        <li>Node.js</li>
+        <li>Express.js</li>
+        <li>express-session</li>
+        <li>bcryptjs</li>
+        <li>helmet</li>
+        <li>express-rate-limit</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">🟢 База данных</div>
+      <ul style="padding-left: 18px; font-size: 0.88rem;">
+        <li>PostgreSQL (через Sequelize)</li>
+        <li>NeDB (встроенная — для демо без БД)</li>
+        <li>Два режима: DB_ENGINE=postgres | nedb</li>
+        <li>JSONB-поля (items, macros, deliveryData)</li>
+        <li>Sequelize ORM</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">🟣 Фронтенд + Тесты</div>
+      <ul style="padding-left: 18px; font-size: 0.88rem;">
+        <li>HTML5 + CSS3 + Vanilla JS</li>
+        <li>Glassmorphism, анимации, skeleton</li>
+        <li>Адаптивная вёрстка</li>
+        <li>Mocha + Chai + Supertest</li>
+        <li><strong>45 тестов ✅</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <strong>💡 Ключевая архитектурная особенность:</strong> 
+    Код написан через NeDB-совместимую обёртку (методы <code>.find()</code>, <code>.insert()</code>, <code>.update()</code>, <code>.remove()</code>), которая транслируется в Sequelize → PostgreSQL. Это позволяет легко переключаться между СУБД. А также — запускать проект без установки PostgreSQL!
+  </div>
+</section>
+
+<!-- ===== 3. STRUCTURE ===== -->
+<section id="structure">
+  <h2>📁 Структура проекта</h2>
+
+  <pre><code>diploma_submission/
+├── <strong>server/</strong>                  # Серверная часть
+│   ├── <strong>server.js</strong>             # 14 API-эндпоинтов, middleware
+│   ├── <strong>database.js</strong>          # БД: PostgreSQL + NeDB (два режима)
+│   ├── setup_pg.js             # Скрипт создания БД
+│   ├── .mocharc.js             # Конфиг Mocha
+│   ├── Procfile                # Деплой
+│   └── models/
+│       ├── User.js             # Пользователи
+│       ├── MenuItem.js         # Блюда меню
+│       └── Order.js            # Заказы
+│
+├── <strong>frontend/</strong>                 # Клиентская часть
+│   ├── index.html              # Главная страница (hero, хиты)
+│   ├── menu.html               # Меню с категориями и поиском
+│   ├── cart.html               # Корзина + форма доставки
+│   ├── auth.html               # Вход / Регистрация
+│   ├── profile.html            # Профиль + бонусы + история
+│   ├── admin.html              # Админ-панель (4 вкладки)
+│   ├── 404.html                # Страница 404
+│   ├── favicon.svg
+│   ├── css/style.css           # Все стили (~900 строк)
+│   └── js/
+│       ├── app.js              # Главная логика (~530 строк)
+│       ├── auth.js             # Аутентификация
+│       ├── cart.js             # Корзина (localStorage)
+│       └── db.js               # API-клиент (fetch)
+│
+├── <strong>tests/</strong>
+│   └── api.test.js             # 45 API-тестов
+│
+├── <strong>diagrams/</strong>                # Диаграммы (PlantUML + SVG/PNG)
+│   ├── architecture.puml       # Архитектура приложения
+│   ├── dfd.puml                # DFD Level 0 + Level 1
+│   ├── use_case.puml + .png    # Use Case диаграмма
+│   ├── sequence_order.puml     # Sequence (оформление заказа)
+│   ├── er_diagram.dbml + .sql  # ER-диаграмма
+│   └── README.md
+│
+├── <strong>README.md</strong>                 # Описание проекта
+├── <strong>GUIDE_TO_PROJECT.md</strong>       # Подробное руководство
+├── <strong>DEFENSE_GUIDE.html</strong>       # <-- ЭТОТ ФАЙЛ (гайд для защиты)
+├── <strong>start.bat</strong>                # Запуск одним кликом
+└── *.docx                      # Файлы дипломной работы</code></pre>
+
+  <div class="grid-3" style="margin-top: 12px;">
+    <div class="card">
+      <div class="card-title">📄 server.js (главный)</div>
+      <p style="font-size:0.82rem;">14 REST API эндпоинтов, middleware requireAdmin, helmet, rate limiting, сессии, статика из frontend/</p>
+    </div>
+    <div class="card">
+      <div class="card-title">📄 database.js (архитектура)</div>
+      <p style="font-size:0.82rem;">Два режима БД (postgres/nedb). NeDB-совместимая обёртка с Cursor-классом для .sort().limit(). Seed-данные: 50 блюд, админ.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">📄 app.js (фронтенд)</div>
+      <p style="font-size:0.82rem;">Рендеринг карточек меню, категории, поиск, валидация, корзина, админка (4 вкладки), бонусы, анимации.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. DATABASE ===== -->
+<section id="db">
+  <h2>🗄 База данных</h2>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">👤 users</div>
+      <table>
+        <tr><th>Поле</th><th>Тип</th></tr>
+        <tr><td>id</td><td>SERIAL PK</td></tr>
+        <tr><td>name</td><td>VARCHAR(255)</td></tr>
+        <tr><td>email</td><td>VARCHAR(255) UNIQUE</td></tr>
+        <tr><td>password</td><td>VARCHAR(255) bcrypt</td></tr>
+        <tr><td>role</td><td>VARCHAR(20) 'user'|'admin'</td></tr>
+        <tr><td>bonusPoints</td><td>INTEGER default 100</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🍕 menu_items</div>
+      <table>
+        <tr><th>Поле</th><th>Тип</th></tr>
+        <tr><td>id</td><td>INTEGER PK</td></tr>
+        <tr><td>category</td><td>VARCHAR(50)</td></tr>
+        <tr><td>name</td><td>VARCHAR(255)</td></tr>
+        <tr><td>price</td><td>INTEGER</td></tr>
+        <tr><td>macros</td><td>JSONB {kcal,protein,fat,carbs}</td></tr>
+        <tr><td>popular</td><td>BOOLEAN</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📦 orders</div>
+    <table>
+      <tr><th>Поле</th><th>Тип</th><th>Описание</th></tr>
+      <tr><td>id</td><td>SERIAL PK</td><td></td></tr>
+      <tr><td>userId</td><td>INTEGER FK → users.id</td><td></td></tr>
+      <tr><td>items</td><td>JSONB</td><td>[{name, price, qty, img}]</td></tr>
+      <tr><td>total</td><td>INTEGER</td><td>Сумма до скидки</td></tr>
+      <tr><td>bonusDiscount</td><td>INTEGER</td><td>Скидка бонусами</td></tr>
+      <tr><td>finalTotal</td><td>INTEGER</td><td>Итоговая сумма</td></tr>
+      <tr><td>earnedBonuses</td><td>INTEGER</td><td>Начислено (5% от finalTotal)</td></tr>
+      <tr><td>status</td><td>VARCHAR(20)</td><td>confirmed→preparing→delivering→done</td></tr>
+    </table>
+  </div>
+
+  <h3>🎲 Seed-данные (создаются автоматически при первом запуске)</h3>
+  <div class="grid-4">
+    <div class="card" style="text-align:center"><div style="font-size:2rem">🍕</div><div style="font-weight:700">10 пицц</div><div style="font-size:0.78rem">490–950 ₽</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:2rem">🍝</div><div style="font-weight:700">10 пасты</div><div style="font-size:0.78rem">460–780 ₽</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:2rem">🥩</div><div style="font-weight:700">10 закусок</div><div style="font-size:0.78rem">240–680 ₽</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:2rem">🍮</div><div style="font-weight:700">10 десертов</div><div style="font-size:0.78rem">250–420 ₽</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:2rem">🍊</div><div style="font-weight:700">10 напитков</div><div style="font-size:0.78rem">150–320 ₽</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:2rem">👑</div><div style="font-weight:700">Админ</div><div style="font-size:0.78rem">admin@labellaitalia.ru</div></div>
+  </div>
+
+  <div class="highlight">
+    <strong>🏛 Архитектура:</strong> Браузер → Express.js → NeDB-совместимая обёртка (database.js) → Sequelize ORM → PostgreSQL<br>
+    Или: Браузер → Express.js → NeDB-совместимая обёртка (database.js) → NeDB (встроенная БД, без PostgreSQL)
+  </div>
+</section>
+
+<!-- ===== 5. API ===== -->
+<section id="api">
+  <h2>🌐 REST API — 14 эндпоинтов</h2>
+
+  <table>
+    <tr><th>Метод</th><th>Маршрут</th><th>Доступ</th><th>Описание</th></tr>
+    <tr><td><span class="tag tag-green">GET</span></td><td><code>/api/menu</code></td><td><span class="tag tag-gray">Публичный</span></td><td>Список всех блюд</td></tr>
+    <tr><td><span class="tag tag-yellow">POST</span></td><td><code>/api/register</code></td><td><span class="tag tag-gray">Гость</span></td><td>Регистрация (+100 бонусов)</td></tr>
+    <tr><td><span class="tag tag-yellow">POST</span></td><td><code>/api/login</code></td><td><span class="tag tag-gray">Гость</span></td><td>Вход (rate limit 10/15 мин)</td></tr>
+    <tr><td><span class="tag tag-yellow">POST</span></td><td><code>/api/logout</code></td><td><span class="tag tag-blue">Любой</span></td><td>Выход</td></tr>
+    <tr><td><span class="tag tag-green">GET</span></td><td><code>/api/me</code></td><td><span class="tag tag-blue">user/admin</span></td><td>Данные текущего пользователя</td></tr>
+    <tr><td><span class="tag tag-yellow">POST</span></td><td><code>/api/orders</code></td><td><span class="tag tag-blue">user</span></td><td>Создание заказа</td></tr>
+    <tr><td><span class="tag tag-green">GET</span></td><td><code>/api/orders/my</code></td><td><span class="tag tag-blue">user</span></td><td>История заказов</td></tr>
+    <tr><td><span class="tag tag-green">GET</span></td><td><code>/api/admin/orders</code></td><td><span class="tag tag-red">admin</span></td><td>Все заказы</td></tr>
+    <tr><td><span class="tag tag-yellow">PATCH</span></td><td><code>/api/admin/orders/:id</code></td><td><span class="tag tag-red">admin</span></td><td>Смена статуса</td></tr>
+    <tr><td><span class="tag tag-red">DELETE</span></td><td><code>/api/admin/orders/:id</code></td><td><span class="tag tag-red">admin</span></td><td>Удаление заказа</td></tr>
+    <tr><td><span class="tag tag-green">GET</span></td><td><code>/api/admin/users</code></td><td><span class="tag tag-red">admin</span></td><td>Список пользователей</td></tr>
+    <tr><td><span class="tag tag-green">GET</span></td><td><code>/api/admin/stats</code></td><td><span class="tag tag-red">admin</span></td><td>Статистика</td></tr>
+    <tr><td><span class="tag tag-yellow">POST</span></td><td><code>/api/admin/menu</code></td><td><span class="tag tag-red">admin</span></td><td>Добавить блюдо</td></tr>
+    <tr><td><span class="tag tag-red">DELETE</span></td><td><code>/api/admin/menu/:id</code></td><td><span class="tag tag-red">admin</span></td><td>Удалить блюдо</td></tr>
+  </table>
+
+  <div class="tip">
+    <strong>✅ Все API-эндпоинты протестированы:</strong> 45 тестов Mocha + Chai + Supertest, все проходят.
+  </div>
+</section>
+
+<!-- ===== 6. HOW TO RUN ===== -->
+<section id="run">
+  <h2>🚀 Запуск проекта</h2>
+
+  <div class="card">
+    <div class="card-title">🔵 Вариант 1. Самый быстрый (NeDB — PostgreSQL не нужен)</div>
+    <pre><code>cd server
+npm install
+node server.js</code></pre>
+    <p>Открыть браузер → <strong>http://localhost:3000/</strong></p>
+    <p>Сервер сам создаст БД с 50 блюдами и админ-пользователем. Работает из коробки.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🟢 Вариант 2. Запуск .bat файлом (один клик)</div>
+    <p>Просто дважды кликнуть на <strong>start.bat</strong> в корне проекта — он автоматически:</p>
+    <ol style="padding-left: 18px;">
+      <li>Переходит в папку <code>server</code></li>
+      <li>Запускает сервер</li>
+      <li>Открывает браузер с <code>http://localhost:3000</code></li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🟣 Вариант 3. Если спросят про PostgreSQL</div>
+    <pre><code>cd server
+DB_ENGINE=postgres node server.js</code></pre>
+    <p>Требуется запущенный PostgreSQL с БД <code>italian_delivery</code>.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🧪 Вариант 4. Запуск тестов</div>
+    <pre><code>cd server && npm test</code></pre>
+    <p><strong>Результат: 45/45 тестов пройдено ✅</strong></p>
+  </div>
+
+  <div class="highlight">
+    <strong>💬 Что сказать комиссии про NeDB:</strong> <em>«Проект поддерживает два режима БД — NeDB для быстрого демо без установки PostgreSQL, и сам PostgreSQL для продакшна. Переключение одной переменной: DB_ENGINE=postgres. Это сделано специально, чтобы комиссии было легко проверить работу без настройки СУБД.»</em>
+  </div>
+</section>
+
+<!-- ===== 7. ROLES ===== -->
+<section id="roles">
+  <h2>👥 Ролевая модель и учётные данные</h2>
+
+  <div class="grid-3">
+    <div class="card" style="text-align:center; border-color: #e5e7eb;">
+      <div style="font-size:2.5rem; margin-bottom:8px">👤</div>
+      <div style="font-weight:700">Гость</div>
+      <div style="font-size:0.78rem; color:var(--text-muted)">Не авторизован</div>
+      <hr style="margin:10px 0; border-color:var(--border)">
+      <ul style="font-size:0.82rem; text-align:left; padding-left:18px;">
+        <li>Просмотр меню</li>
+        <li>Поиск и фильтрация</li>
+        <li>Нет доступа к корзине</li>
+      </ul>
+    </div>
+    <div class="card" style="text-align:center; border-color: #dbeafe;">
+      <div style="font-size:2.5rem; margin-bottom:8px">😊</div>
+      <div style="font-weight:700">Клиент</div>
+      <div style="font-size:0.78rem; color:var(--text-muted)">role: 'user'</div>
+      <hr style="margin:10px 0; border-color:var(--border)">
+      <ul style="font-size:0.82rem; text-align:left; padding-left:18px;">
+        <li>Всё, что гость</li>
+        <li>Корзина и заказы</li>
+        <li>Бонусы и история</li>
+        <li>Профиль</li>
+      </ul>
+    </div>
+    <div class="card" style="text-align:center; border-color: var(--red-light);">
+      <div style="font-size:2.5rem; margin-bottom:8px">👑</div>
+      <div style="font-weight:700">Администратор</div>
+      <div style="font-size:0.78rem; color:var(--text-muted)">role: 'admin'</div>
+      <hr style="margin:10px 0; border-color:var(--border)">
+      <ul style="font-size:0.82rem; text-align:left; padding-left:18px;">
+        <li>Всё, что клиент</li>
+        <li>Управление заказами</li>
+        <li>CRUD меню</li>
+        <li>Статистика</li>
+        <li>Список пользователей</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>🔑 Учётные данные для демонстрации</h3>
+  <table>
+    <tr><th>Роль</th><th>Email</th><th>Пароль</th></tr>
+    <tr><td><span class="tag tag-red">Администратор</span></td><td><code>admin@labellaitalia.ru</code></td><td><code>admin123</code></td></tr>
+    <tr><td><span class="tag tag-blue">Пользователь</span></td><td><code>ivan@example.com</code></td><td><code>123456</code></td></tr>
+  </table>
+</section>
+
+<!-- ===== 8. BONUS SYSTEM ===== -->
+<section id="bonus">
+  <h2>🎁 Бонусная система</h2>
+
+  <div class="grid-3">
+    <div class="card" style="text-align:center">
+      <div style="font-size:2.5rem">🎉</div>
+      <div style="font-size:1.8rem; font-weight:800; color:var(--red)">100</div>
+      <div style="font-size:0.85rem">бонусов при регистрации</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:2.5rem">💰</div>
+      <div style="font-size:1.8rem; font-weight:800; color:var(--red)">5%</div>
+      <div style="font-size:0.85rem">кэшбэк с каждого заказа</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:2.5rem">🎯</div>
+      <div style="font-size:1.8rem; font-weight:800; color:var(--red)">30%</div>
+      <div style="font-size:0.85rem">макс. скидка бонусами</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Уровни лояльности</div>
+    <table>
+      <tr><th>Уровень</th><th>Бонусов</th><th>Прогресс</th></tr>
+      <tr><td>👤 Новичок</td><td>0–499</td><td>🎯 до 500</td></tr>
+      <tr><td>🍝 Гурман</td><td>500–1499</td><td>🎯 до 1500</td></tr>
+      <tr><td>👑 Шеф</td><td>1500+</td><td>🎯 макс</td></tr>
+    </table>
+  </div>
+
+  <div class="highlight">
+    <strong>🧮 Формула расчёта:</strong> <code>bonusDiscount = min(user.bonusPoints, floor(total × 0.3))</code><br>
+    <strong>Начисление:</strong> <code>earnedBonuses = floor(finalTotal × 0.05)</code><br>
+    <strong>Защита от отрицательных:</strong> <code>Math.max(0, user.bonusPoints + earnedBonuses - bonusDiscount)</code>
+  </div>
+</section>
+
+<!-- ===== 9. SECURITY ===== -->
+<section id="security">
+  <h2>🔒 Безопасность</h2>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">✅ Реализовано</div>
+      <ul style="padding-left: 18px;">
+        <li><strong>helmet()</strong> — защита HTTP-заголовков</li>
+        <li><strong>bcryptjs</strong> — хеширование паролей (10 раундов соли)</li>
+        <li><strong>express-rate-limit</strong> — 10 попыток входа за 15 минут</li>
+        <li><strong>httpOnly + SameSite:strict</strong> cookie для сессий</li>
+        <li><strong>requireAdmin</strong> middleware — проверка роли на всех админ-маршрутах</li>
+        <li>Проверка авторизации на /api/me, /api/orders/my (401)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">🔜 Планируется (из диплома)</div>
+      <ul style="padding-left: 18px;">
+        <li>CSRF-токены</li>
+        <li>WebSockets для real-time обновлений</li>
+        <li>Интеграция с платёжными системами</li>
+        <li>Multer для загрузки фото блюд</li>
+        <li>Мобильное приложение</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 10. DEMO SCRIPT ===== -->
+<section id="demo">
+  <h2>🎬 Сценарий демонстрации для комиссии</h2>
+
+  <div class="card">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <span style="background:var(--red); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem">1</span>
+      <span style="font-weight:700; font-size:1rem">Главная страница (index.html)</span>
+    </div>
+    <p>Покажите Hero-секцию, навигацию, хиты меню, блок «Почему мы», бонусную программу. Обратите внимание на красивый дизайн (glassmorphism, градиенты, анимации).</p>
+    <pre><code>→ http://localhost:3000/</code></pre>
+  </div>
+
+  <div class="card">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <span style="background:var(--red); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem">2</span>
+      <span style="font-weight:700; font-size:1rem">Меню (menu.html)</span>
+    </div>
+    <p>50 блюд в 5 категориях. Переключайте вкладки (Пицца, Паста, Закуски...). Покажите поиск по названию. Обратите внимание: у каждого блюда — цена, вес, БЖУ, кнопка «В корзину» с анимацией.</p>
+    <pre><code>→ http://localhost:3000/menu.html</code></pre>
+  </div>
+
+  <div class="card">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <span style="background:var(--red); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem">3</span>
+      <span style="font-weight:700; font-size:1rem">Регистрация / Вход (auth.html)</span>
+    </div>
+    <p>Переключение между формами (табы). Покажите валидацию. Зарегистрируйтесь (или войдите как ivan@example.com / 123456). Обратите внимание: при регистрации начисляется 100 бонусов.</p>
+    <pre><code>→ http://localhost:3000/auth.html</code></pre>
+  </div>
+
+  <div class="card">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <span style="background:var(--red); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem">4</span>
+      <span style="font-weight:700; font-size:1rem">Корзина и заказ (cart.html)</span>
+    </div>
+    <p>Добавьте 2-3 блюда в корзину. Покажите корзину с количеством, суммой, бонусным чекбоксом. Заполните форму доставки (покажите живую валидацию). Оформите заказ. Покажите страницу успеха с номером заказа.</p>
+    <pre><code>→ http://localhost:3000/cart.html</code></pre>
+  </div>
+
+  <div class="card">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <span style="background:var(--red); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem">5</span>
+      <span style="font-weight:700; font-size:1rem">Профиль (profile.html)</span>
+    </div>
+    <p>Аватар, бонусы, прогресс-бар уровня, история заказов со статусами.</p>
+    <pre><code>→ http://localhost:3000/profile.html</code></pre>
+  </div>
+
+  <div class="card">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <span style="background:var(--red); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem">6</span>
+      <span style="font-weight:700; font-size:1rem">Админ-панель (admin.html)</span>
+    </div>
+    <p><strong>Войдите как admin@labellaitalia.ru / admin123</strong>. Покажите 4 вкладки:</p>
+    <ol style="padding-left: 18px;">
+      <li><strong>Заказы</strong> — таблица всех заказов, смена статуса (выпадающий список), удаление</li>
+      <li><strong>Пользователи</strong> — список с ролями и бонусами</li>
+      <li><strong>Меню</strong> — форма добавления блюда + таблица с кнопками удаления</li>
+      <li><strong>Статистика</strong> — выручка, средний чек, количество заказов, распределение по статусам</li>
+    </ol>
+    <pre><code>→ http://localhost:3000/admin.html</code></pre>
+  </div>
+
+  <div class="card">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <span style="background:var(--red); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem">7</span>
+      <span style="font-weight:700; font-size:1rem">404 страница</span>
+    </div>
+    <p>Покажите красивую 404 с навигацией</p>
+    <pre><code>→ http://localhost:3000/nonexistent</code></pre>
+  </div>
+
+  <div class="card">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <span style="background:var(--red); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem">8</span>
+      <span style="font-weight:700; font-size:1rem">Тесты (если попросят)</span>
+    </div>
+    <pre><code>cd server && npm test</code></pre>
+    <p>Покажите зелёный вывод: <strong>45 passing</strong></p>
+  </div>
+</section>
+
+<!-- ===== 11. Q&A ===== -->
+<section id="qa">
+  <h2>💬 Вопросы на защите — с ответами</h2>
+
+  <div class="qa-item">
+    <div class="qa-q">1. Какая архитектура используется в приложении?</div>
+    <div class="qa-a"><strong>Ответ:</strong> Клиент-серверная архитектура с REST API. Клиент (браузер) отправляет HTTP-запросы к серверу Node.js + Express.js. Сервер обрабатывает их через NeDB-совместимую обёртку, которая транслируется в Sequelize ORM → PostgreSQL. Фронтенд — SPA-like на Vanilla JS (без фреймворков).</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">2. Почему NeDB-обёртка, а не прямой Sequelize?</div>
+    <div class="qa-a"><strong>Ответ:</strong> NeDB предоставляет простой интуитивный API — .find(), .insert(), .update(), .remove(). Обёртка транслирует эти запросы в Sequelize. Это даёт: (1) компактный и читаемый код, (2) возможность переключиться на NeDB без переписывания кода, (3) единый интерфейс независимо от СУБД.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">3. Как обеспечивается безопасность?</div>
+    <div class="qa-a"><strong>Ответ:</strong> Четыре уровня: (1) <strong>helmet</strong> — защита HTTP-заголовков; (2) <strong>bcryptjs</strong> — хеширование паролей (10 раундов); (3) <strong>express-rate-limit</strong> — 10 попыток входа за 15 минут; (4) <strong>middleware requireAdmin</strong> — проверка роли на всех админ-маршрутах. Сессии: httpOnly + SameSite:strict.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">4. Какая БД используется и почему?</div>
+    <div class="qa-a"><strong>Ответ:</strong> PostgreSQL — надёжная реляционная СУБД. Через Sequelize ORM с защитой от SQL-инъекций. JSONB-поля в меню и заказах дают гибкость документной модели внутри реляционной БД.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">5. Как работает бонусная система?</div>
+    <div class="qa-a"><strong>Ответ:</strong> 100 баллов при регистрации, 5% кэшбэк с каждого заказа, до 30% суммы можно оплатить бонусами. Есть защита от отрицательных значений (Math.max(0, ...)). Уровни: Новичок (0-499), Гурман (500-1499), Шеф (1500+).</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">6. Как хранится корзина?</div>
+    <div class="qa-a"><strong>Ответ:</strong> В localStorage браузера — не нагружает сервер, сохраняется при перезагрузке. При оформлении заказа данные отправляются на сервер, создаётся запись в таблице orders, корзина очищается.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">7. Какие функции у администратора?</div>
+    <div class="qa-a"><strong>Ответ:</strong> Четыре вкладки: Заказы (просмотр, смена статуса, удаление), Пользователи (весь список), Меню (добавить/удалить блюда), Статистика (выручка, средний чек, количество заказов). Все админ-маршруты защищены ролью.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">8. Сколько тестов и что они проверяют?</div>
+    <div class="qa-a"><strong>Ответ:</strong> 45 тестов (Mocha + Chai + Supertest). Проверяют: меню, регистрацию, вход/выход, профиль, создание заказов с бонусами, историю, админ-панель (статистика, пользователи, заказы, меню), удаление, 404. Все тесты проходят.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">9. Какие были сложности?</div>
+    <div class="qa-a"><strong>Ответ:</strong> (1) NeDB-обёртка — нужно было реализовать цепочечные методы .sort().limit() для полной совместимости. (2) Бонусная система — корректная обработка списания + начисления за один заказ. (3) Валидация адреса Москвы — определение улицы и номера дома.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">10. Почему проект не требует PostgreSQL для демо?</div>
+    <div class="qa-a"><strong>Ответ:</strong> Проект поддерживает два режима: DB_ENGINE=nedb (встроенная файловая БД, не требует установки) и DB_ENGINE=postgres. Переключение одной переменной окружения. Это сделано для удобства проверки комиссией.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">11. Какие планы по развитию?</div>
+    <div class="qa-a"><strong>Ответ:</strong> Интеграция с платёжными системами, WebSockets для real-time обновлений, мобильное приложение, CSRF-защита, загрузка фото блюд, CRM и аналитика.</div>
+  </div>
+</section>
+
+<!-- ===== 12. DIAGRAMS ===== -->
+<section id="diagrams">
+  <h2>📐 Диаграммы проекта</h2>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">📊 Use Case</div>
+      <p style="font-size:0.82rem">3 актёра: Гость, Пользователь, Администратор. 13 use case. Файл: <code>diagrams/use_case.puml</code></p>
+    </div>
+    <div class="card">
+      <div class="card-title">🏛 Архитектура</div>
+      <p style="font-size:0.82rem">Клиент → Express → NeDB-обёртка → Sequelize → PostgreSQL. Файл: <code>diagrams/architecture.puml</code></p>
+    </div>
+    <div class="card">
+      <div class="card-title">📦 DFD (Data Flow)</div>
+      <p style="font-size:0.82rem">Level 0 (контекстная) + Level 1 (детализация: 5 процессов). Файл: <code>diagrams/dfd.puml</code></p>
+    </div>
+    <div class="card">
+      <div class="card-title">🔗 Sequence (заказ)</div>
+      <p style="font-size:0.82rem">Полная последовательность: просмотр меню → корзина → оформление → бонусы → статус. Файл: <code>diagrams/sequence_order.puml</code></p>
+    </div>
+    <div class="card">
+      <div class="card-title">🎯 ER-диаграмма</div>
+      <p style="font-size:0.82rem">3 таблицы: users, menu_items, orders. Связи, JSONB-поля. Файл: <code>diagrams/er_diagram.dbml</code> + <code>er_diagram.sql</code></p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 13. CHECKLIST ===== -->
+<section id="checklist">
+  <h2>✅ Чек-лист готовности к защите</h2>
+
+  <ul class="checklist">
+    <li class="done">Проект запускается (cd server && node server.js)</li>
+    <li class="done">Сайт открывается в браузере (http://localhost:3000)</li>
+    <li class="done">45/45 тестов проходят (cd server && npm test)</li>
+    <li class="done">Сервер работает с NeDB (PostgreSQL не нужен)</li>
+    <li class="done">Создан start.bat для запуска одним кликом</li>
+    <li class="done">Создан DEFENSE_GUIDE.html с полным описанием</li>
+    <li class="done">Подготовлены учётные данные (admin@labellaitalia.ru / admin123)</li>
+    <li class="done">Продуманы ответы на вопросы комиссии (раздел Q&A)</li>
+    <li class="done">Диаграммы в папке diagrams/ готовы к показу</li>
+    <li>Проверить docx файлы диплома на соответствие коду</li>
+    <li>Открыть DEFENSE_GUIDE.html в браузере / распечатать</li>
+  </ul>
+
+  <div class="tip">
+    <strong>🎯 Удачи на защите!</strong> Ты всё сделал. Проект рабочий, протестированный, красиво оформленный. Просто следуй этому гайду — и всё пройдёт отлично!
+  </div>
+
+  <div style="text-align:center; padding: 32px 0;">
+    <div style="font-size:4rem; margin-bottom: 8px;">🍕</div>
+    <div style="font-weight:800; font-size: 1.2rem; color: var(--red);">La Bella Italia</div>
+    <div style="color: var(--text-muted); font-size: 0.85rem;">Дипломный проект • 2026</div>
+  </div>
+</section>
+
+</div>
+
+<div class="footer">
+  <p>La Bella Italia — Дипломный проект. Создано с помощью Codebuff AI.</p>
+</div>
+
+<script>
+// Tab scrolling
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', e => {
+    e.preventDefault();
+    const target = tab.getAttribute('href');
+    document.querySelector(target).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
+// Highlight active tab on scroll
+const sections = document.querySelectorAll('section[id]');
+const tabs = document.querySelectorAll('.nav-tab');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    const top = s.offsetTop - 120;
+    if (window.scrollY >= top) current = '#' + s.id;
+  });
+  tabs.forEach(t => {
+    t.classList.toggle('active', t.getAttribute('href') === current);
+  });
+});
+</script>
+
+</body>
+</html>

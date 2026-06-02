@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Bella Italia — Доставка итальянской еды</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="home">
+  <script>setTimeout(()=>{const l=document.getElementById("page-loader");if(l)l.remove();},3000);</script>
+  <div id="page-loader"><div class="loader-logo">🍕</div><div class="loader-spinner"></div><div class="loader-text">Загрузка...</div></div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo">
+        <span class="logo-icon">🍕</span> La Bella Italia
+      </a>
+      <div class="navbar-nav">
+        <a href="index.html" class="active">Главная</a>
+        <a href="menu.html">Меню</a>
+      </div>
+      <div class="navbar-right">
+        <div class="nav-auth">
+          <a href="auth.html" class="btn-nav-auth btn-login">Войти</a>
+          <a href="auth.html" class="btn-nav-auth btn-register">Регистрация</a>
+        </div>
+        <div class="nav-user" style="display:none">
+          <span class="bonus-badge">0 бонусов</span>
+          <a href="profile.html" class="nav-user-name" id="nav-username">Профиль</a>
+          <a href="admin.html" class="nav-admin-link" style="display:none">Админ</a>
+          <button class="btn-logout" onclick="logout()">Выйти</button>
+        </div>
+        <a href="cart.html" class="btn-cart">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          Корзина
+          <span class="cart-badge" style="display:none">0</span>
+        </a>
+      </div>
+      <button class="burger" id="burger-btn" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <div class="mobile-menu-inner">
+      <a href="index.html" class="active">🏠 Главная</a>
+      <a href="menu.html">🍕 Меню</a>
+      <div class="mobile-menu-divider"></div>
+      <a href="cart.html">🛒 Корзина <span class="cart-badge" style="display:none;position:relative;top:0;right:0;margin-left:4px">0</span></a>
+      <div id="mobile-auth-links">
+        <a href="auth.html">Войти</a>
+        <a href="auth.html">Регистрация</a>
+      </div>
+      <div id="mobile-user-links" style="display:none">
+        <a href="profile.html">👤 Профиль</a>
+        <a href="admin.html" id="mobile-admin-link" style="display:none">⚙️ Админ</a>
+        <button onclick="logout()">Выйти</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-bg-img"></div>
+    <div class="hero-inner">
+      <div>
+        <div class="hero-tag">🇮🇹 Настоящая итальянская кухня</div>
+        <h1>Вкус <em>Италии</em><br>к вашей двери</h1>
+        <p class="hero-desc">Пицца на дровяной печи, свежая паста, тирамису — из оригинальных итальянских ингредиентов. Доставка за 40 минут.</p>
+        <div class="hero-cta">
+          <a href="menu.html" class="btn-primary">🍕 Смотреть меню</a>
+          <a href="auth.html" class="btn-secondary">🎁 Получить 100 бонусов</a>
+        </div>
+        <div class="hero-stats">
+          <div><div class="hero-stat-num">40</div><div class="hero-stat-label">мин. доставка</div></div>
+          <div><div class="hero-stat-num">36+</div><div class="hero-stat-label">блюд</div></div>
+          <div><div class="hero-stat-num">4.9★</div><div class="hero-stat-label">рейтинг</div></div>
+          <div><div class="hero-stat-num">5%</div><div class="hero-stat-label">кэшбэк</div></div>
+        </div>
+      </div>
+      <div class="hero-photo">
+        <div class="hero-food-card">
+          <div class="hero-food-emoji">🍕</div>
+          <div class="hero-food-label">Маргарита</div>
+          <div class="hero-food-price">590 ₽</div>
+        </div>
+        <div class="hero-food-card hero-food-card--2">
+          <div class="hero-food-emoji">🍝</div>
+          <div class="hero-food-label">Карбонара</div>
+          <div class="hero-food-price">520 ₽</div>
+        </div>
+        <div class="hero-food-card hero-food-card--3">
+          <div class="hero-food-emoji">🍮</div>
+          <div class="hero-food-label">Тирамису</div>
+          <div class="hero-food-price">380 ₽</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features strip -->
+  <div class="features-strip">
+    <div class="features-strip-inner">
+      <div class="feature-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Доставка за 40 минут
+      </div>
+      <div class="feature-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Итальянские ингредиенты
+      </div>
+      <div class="feature-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        5% кэшбэк бонусами
+      </div>
+      <div class="feature-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        Бесплатно от 1500 ₽
+      </div>
+      <div class="feature-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Безопасная оплата
+      </div>
+    </div>
+  </div>
+
+  <!-- Хиты меню -->
+  <section class="featured-section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Хиты меню</h2>
+          <p class="section-subtitle">Самые популярные блюда наших гостей</p>
+        </div>
+        <a href="menu.html" class="section-link">Всё меню →</a>
+      </div>
+      <div class="menu-grid" id="featured-grid"></div>
+    </div>
+  </section>
+
+  <!-- Бонусная программа -->
+  <section class="bonus-section">
+    <div class="container">
+      <div class="bonus-inner">
+        <div class="bonus-text">
+          <div class="hero-tag" style="margin-bottom:1rem">🎁 Программа лояльности</div>
+          <h2 style="font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:800;line-height:1.15;margin-bottom:1rem">
+            Копи бонусы —<br><em style="color:var(--gold);font-style:normal">получай скидки</em>
+          </h2>
+          <p style="opacity:0.7;font-size:1rem;line-height:1.7;max-width:420px;margin-bottom:2rem">
+            За каждый заказ начисляем 5% от суммы бонусами. Оплачивай до 30% следующего заказа.
+          </p>
+          <a href="auth.html" class="btn-primary" style="display:inline-flex">Зарегистрироваться бесплатно</a>
+        </div>
+        <div class="bonus-cards">
+          <div class="bonus-card">
+            <div class="bonus-card-num">+100</div>
+            <div class="bonus-card-label">бонусов при регистрации</div>
+          </div>
+          <div class="bonus-card">
+            <div class="bonus-card-num">5%</div>
+            <div class="bonus-card-label">кэшбэк с каждого заказа</div>
+          </div>
+          <div class="bonus-card">
+            <div class="bonus-card-num">30%</div>
+            <div class="bonus-card-label">максимальная скидка</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Почему мы -->
+  <section class="why-section">
+    <div class="container">
+      <div class="section-header" style="justify-content:center;text-align:center;flex-direction:column;align-items:center">
+        <h2 class="section-title">Почему выбирают нас</h2>
+        <p class="section-subtitle">Мы готовим с душой и доставляем с заботой</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon">🍕</div>
+          <h3>Дровяная печь</h3>
+          <p>Пицца выпекается при 450°C в настоящей дровяной печи — хрустящее тесто и сочная начинка</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">🇮🇹</div>
+          <h3>Оригинальные рецепты</h3>
+          <p>Шеф-повар из Неаполя готовит по семейным рецептам с использованием импортных ингредиентов</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">⚡</div>
+          <h3>Быстрая доставка</h3>
+          <p>Горячая еда у вашей двери за 40 минут. Отслеживайте заказ в личном кабинете</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">💚</div>
+          <h3>Свежие продукты</h3>
+          <p>Ежедневная поставка свежих овощей, мяса и сыров. Никаких консервантов и заморозки</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">🍕 La Bella Italia</div>
+        <p class="footer-desc">Настоящая итальянская кухня с доставкой по Москве. Готовим с любовью каждый день.</p>
+        <div style="margin-top:1rem;font-size:0.82rem;opacity:0.5">Работаем: 11:00 — 23:00</div>
+      </div>
+      <div class="footer-col">
+        <h4>Меню</h4>
+        <a href="menu.html">Пицца</a>
+        <a href="menu.html">Паста</a>
+        <a href="menu.html">Закуски</a>
+        <a href="menu.html">Десерты</a>
+        <a href="menu.html">Напитки</a>
+      </div>
+      <div class="footer-col">
+        <h4>Аккаунт</h4>
+        <a href="auth.html">Войти</a>
+        <a href="auth.html">Регистрация</a>
+        <a href="profile.html">Профиль</a>
+        <a href="cart.html">Корзина</a>
+      </div>
+      <div class="footer-col">
+        <h4>Контакты</h4>
+        <a href="tel:+79851428270">+7 (985) 142-82-70</a>
+        <a href="mailto:hello@labellaitalia.ru">hello@labellaitalia.ru</a>
+        <div style="margin-top:0.5rem;font-size:0.8rem;line-height:1.6">Москва,<br>ул. Тверская, 12</div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 La Bella Italia. Все права защищены.</span>
+      <span>Доставка по Москве и МО</span>
+    </div>
+  </footer>
+
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

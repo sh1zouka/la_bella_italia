@@ -1,0 +1,127 @@
+@startuml
+' ============================================================
+' Диаграмма компонентов — La Bella Italia
+' ============================================================
+' Скопировать в https://www.planttext.com для рендера
+
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 12
+skinparam componentStyle rectangle
+
+title **Диаграмма компонентов (Component Diagram)**
+
+' === Клиентские компоненты ===
+package "Клиентская часть (Frontend)" as UI {
+  [index.html\nГлавная страница] as HomePage
+  [menu.html\nМеню с категориями] as MenuPage
+  [cart.html\nКорзина и заказ] as CartPage
+  [auth.html\nВход/Регистрация] as AuthPage
+  [profile.html\nЛичный кабинет] as ProfilePage
+  [admin.html\nПанель админа] as AdminPage
+  [404.html\nСтраница ошибки] as ErrorPage
+  [style.css\nСтили] as Styles
+  
+  package "JavaScript модули" as JS {
+    [db.js\nAPI-клиент] as API
+    [auth.js\nАутентификация] as Auth
+    [cart.js\nКорзина] as Cart
+    [app.js\nГлавная логика] as App
+  }
+  
+  () "localStorage" as LS
+}
+
+' === Серверные компоненты ===
+package "Серверная часть (Backend)" as Server {
+  [server.js\nExpress.js API] as ExpressAPI
+  [database.js\nИнициализация БД] as DBInit
+  
+  package "Модели Sequelize" as Models {
+    [User.js\nМодель пользователя] as UserModel
+    [MenuItem.js\nМодель блюда] as MenuItemModel
+    [Order.js\nМодель заказа] as OrderModel
+  }
+  
+  () "NeDB API\n(find, insert, update)" as NeDBAPI
+}
+
+' === База данных ===
+database "PostgreSQL" as PG {
+  [users] as UsersTable
+  [menu_items] as MenuItemsTable
+  [orders] as OrdersTable
+}
+
+' === Внешние API ===
+cloud "Внешние API" as External {
+  [Google Fonts] as GF
+}
+
+' === Связи между компонентами ===
+
+' Страницы подключают стили и скрипты
+HomePage --> Styles
+MenuPage --> Styles
+CartPage --> Styles
+AuthPage --> Styles
+ProfilePage --> Styles
+AdminPage --> Styles
+
+HomePage --> App
+MenuPage --> App
+CartPage --> App
+AuthPage --> App
+ProfilePage --> App
+AdminPage --> App
+
+' JS модули
+App --> API : HTTP-запросы
+App --> Auth : auth.js
+App --> Cart : cart.js
+Auth --> LS : localStorage
+Cart --> LS : localStorage
+
+' Клиент → Сервер
+API --> ExpressAPI : REST API (JSON)
+ExpressAPI --> NeDBAPI : db.menu/orders/users
+NeDBAPI --> DBInit : Трансляция запросов
+DBInit --> UserModel
+DBInit --> MenuItemModel
+DBInit --> OrderModel
+
+' Модели → PostgreSQL
+UserModel --> UsersTable : users
+MenuItemModel --> MenuItemsTable : menu_items
+OrderModel --> OrdersTable : orders
+
+' Внешние
+HomePage .> GF : Шрифты
+
+' === Легенда ===
+legend bottom
+  |= Компонент |= Описание |
+  | [Компонент] | Модуль/файл системы |
+  | () Интерфейс | API или хранилище |
+  | ---> Зависимость | Направление связи |
+endlegend
+
+note top of ExpressAPI
+  **API Эндпоинты (14 шт.):**
+  GET /api/menu
+  POST /api/register
+  POST /api/login
+  POST /api/logout
+  GET /api/me
+  POST /api/orders
+  GET /api/orders/my
+  GET /api/admin/orders
+  PATCH /api/admin/orders/:id
+  DELETE /api/admin/orders/:id
+  GET /api/admin/users
+  GET /api/admin/stats
+  POST /api/admin/menu
+  DELETE /api/admin/menu/:id
+end note
+
+@enduml
