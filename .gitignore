@@ -28,6 +28,12 @@ __pycache__/
 *.docx
 .~lock.*
 
+# Диаграммы и гайды (для диплома, не в коде)
+diploma_submission/diagrams/
+diploma_submission/diploma_diagrams/
+diploma_submission/DEFENSE_GUIDE.html
+diploma_submission/GUIDE_TO_PROJECT.md
+
 # Сгенерированные скрипты (не часть проекта)
 generate_presentation.py
 analyze_template.py
